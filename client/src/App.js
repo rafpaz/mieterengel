@@ -36,7 +36,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Edit <code>src/App.js</code> and save to reload@@@@
           </p>
           <a
             className="App-link"
@@ -60,6 +60,11 @@ class App extends Component {
           <button type="submit">Submit</button>
         </form>
         <p>{this.state.responseToPost}</p>
+
+        <form action="/uploadImage" encType="multipart/form-data" method="POST">
+          <input type="file" name="myImage" accept="image/*"/>
+          <input type="submit" value="Upload Photo"/>
+        </form>
       </div>
     );
   }
