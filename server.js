@@ -43,11 +43,20 @@ app.post('/api/world', (req, res) => {
 
 app.post('/uploadImage', upload.single('myImage'), async (req, res, next) => {
   const file = req.file;
+
+  if (!file) {
+    const error = new Error('Please upload a file');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+
   await imagesToPdf([file.path], `${file.path}.pdf`);
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: mailProperties,
   });
+
   const mailOptions = {
     from: mailProperties.user,
     to: mailTo,
@@ -56,20 +65,16 @@ app.post('/uploadImage', upload.single('myImage'), async (req, res, next) => {
       path: `${file.path}.pdf`
     }],
   };
+
   transporter.sendMail(mailOptions, (err, info) => {
     if (err)
       console.log(err);
     else
       console.log(info);
+    fs.unlinkSync(file.path);
+    fs.unlinkSync(`${file.path}.pdf`);
   });
 
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
-  }
-  fs.unlinkSync(file.path);
-  fs.unlinkSync(`${file.path}.pdf`);
   res.send(file)
 });
 
