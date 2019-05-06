@@ -3,36 +3,20 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 5000;
-const multer = require('multer');
 const imagesToPdf = require('images-to-pdf');
-const nodemailer = require('nodemailer');
-const fs = require('fs');
+const upload = require('./services/multer');
+const nodeMail = require('./services/nodemailer');
+const mail = new nodeMail();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// SET STORAGE
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-});
-
-const upload = multer({ storage: storage });
 
 // API calls
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
 
-const mailProperties = {
-  user: 'mieterengelrafael@gmail.com',
-  pass: 'HometaskCamera1!',
-};
-const mailTo = 'refaelypaz@gmail.com';
 
 app.post('/api/world', (req, res) => {
   console.log(req.body);
@@ -51,31 +35,9 @@ app.post('/uploadImage', upload.single('myImage'), async (req, res, next) => {
   }
 
   await imagesToPdf([file.path], `${file.path}.pdf`);
+  mail.sendMail(file);
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: mailProperties,
-  });
-
-  const mailOptions = {
-    from: mailProperties.user,
-    to: mailTo,
-    subject: 'Testing Image',
-    attachments: [{
-      path: `${file.path}.pdf`
-    }],
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err)
-      console.log(err);
-    else
-      console.log(info);
-    fs.unlinkSync(file.path);
-    fs.unlinkSync(`${file.path}.pdf`);
-  });
-
-  res.send(file)
+  res.send(file);
 });
 
 if (process.env.NODE_ENV === 'production') {
