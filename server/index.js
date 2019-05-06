@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 5000;
-const imagesToPdf = require('images-to-pdf');
+const imagesToPdf = require('./services/imageToPdf');
 const upload = require('./services/multer');
 const nodeMail = require('./services/nodemailer');
 const mail = new nodeMail();
@@ -34,8 +34,8 @@ app.post('/uploadImage', upload.single('myImage'), async (req, res, next) => {
     return next(error);
   }
 
-  await imagesToPdf([file.path], `${file.path}.pdf`);
-  mail.sendMail(file);
+  await imagesToPdf(file);
+  await mail.sendMail(file);
 
   res.send(file);
 });
