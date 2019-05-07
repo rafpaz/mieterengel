@@ -6,7 +6,6 @@ const util = require('util');
 
 class NodeMail {
   constructor() {
-    console.log('@@@@@@@', process.env.MAIL_USER);
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -30,7 +29,7 @@ class NodeMail {
       }],
     };
     const options = {...this.mailOptions, ...attachment};
-    console.log(options);
+
     try {
       await this.mailSender(options);
     } catch(e) {

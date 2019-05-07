@@ -61,7 +61,7 @@ class App extends Component {
         </form>
         <p>{this.state.responseToPost}</p>
 
-        <form action="/uploadImage" encType="multipart/form-data" method="POST">
+        <form action="/api/uploadImage" encType="multipart/form-data" method="POST">
           <input type="file" name="myImage" accept="image/*"/>
           <input type="submit" value="Upload Photo"/>
         </form>
