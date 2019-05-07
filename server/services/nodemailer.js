@@ -6,12 +6,16 @@ const util = require('util');
 
 class NodeMail {
   constructor() {
+    console.log('@@@@@@@', process.env.MAIL_USER);
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
-      auth: config.mailProperties,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASSWORD,
+      },
     });
     this.mailOptions = {
-      from: config.mailProperties.user,
+      from: process.env.MAIL_USER,
       to: config.mailTo,
       subject: 'Mail with Image',
     };
@@ -26,7 +30,7 @@ class NodeMail {
       }],
     };
     const options = {...this.mailOptions, ...attachment};
-
+    console.log(options);
     try {
       await this.mailSender(options);
     } catch(e) {

@@ -5,12 +5,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 const imagesToPdf = require('./services/imageToPdf');
 const upload = require('./services/multer');
+require('dotenvenc')(process.env.M_TASK_KEY);
+require('dotenv').config();
 const nodeMail = require('./services/nodemailer');
 const mail = new nodeMail();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 // API calls
 app.get('/api/hello', (req, res) => {
