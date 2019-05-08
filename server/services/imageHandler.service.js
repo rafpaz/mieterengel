@@ -1,5 +1,6 @@
 const imageToPdf = require('../utils/imageToPdf');
 const NodeMail = require('../utils/nodemailer');
+
 const mail = new NodeMail();
 
 const uploadImage = async (image) => {
@@ -7,7 +8,7 @@ const uploadImage = async (image) => {
     await imageToPdf(image);
     await mail.sendMail(image);
     return Promise.resolve();
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     return Promise.reject(e);
   }

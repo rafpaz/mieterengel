@@ -1,0 +1,19 @@
+{
+    "extends": ["airbnb", "plugin:jsx-a11y/recommended"],
+    "plugins": [
+        "react",
+        "jsx-a11y"
+    ],
+    "rules": {
+        "max-len": [2, { "code": 120 }],
+        "react/no-array-index-key": 0,
+        "no-param-reassign": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/label-has-for": "off",
+        "no-underscore-dangle": "off"
+    },
+    "env": {
+        "browser": true,
+        "es6": true
+    }
+}

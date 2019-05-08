@@ -1,8 +1,9 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
-const config = require('../../config');
-const FILE_SUFFIX = 'pdf';
 const util = require('util');
+const config = require('../../config');
+
+const FILE_SUFFIX = 'pdf';
 
 class NodeMail {
   constructor() {
@@ -28,11 +29,11 @@ class NodeMail {
         path: fileName,
       }],
     };
-    const options = {...this.mailOptions, ...attachment};
+    const options = { ...this.mailOptions, ...attachment };
 
     try {
       await this.mailSender(options);
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
     fs.unlinkSync(file.path);
